@@ -1,22 +1,30 @@
+import org.junit.jupiter.api.Test;
 
-public class poc_ivaTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Test 
-void shouldPropductoNegativo(){
-    duble valor_prodcto =-100;
-    assertEquals(0, helper.calculateiva(valor_prodcto);
+class PocIvaTest {
 
-}   
+    private final IvaHelper helper = new IvaHelper();
 
-@Test 
-void shouldPropductoCero(){
-    
-    duble valor_prodcto =0;
-    
-    assertEquals(0, helper.calculateiva(valor_prodcto);
+    @Test
+    void shouldProductoNegativo() {
+        double valorProducto = -100;
 
-}   
+        assertEquals(
+            0.0,
+            helper.calculateIva(valorProducto),
+            0.001
+        );
+    }
 
+    @Test
+    void shouldProductoCero() {
+        double valorProducto = 0;
 
-
+        assertEquals(
+            0.0,
+            helper.calculateIva(valorProducto),
+            0.001
+        );
+    }
 }

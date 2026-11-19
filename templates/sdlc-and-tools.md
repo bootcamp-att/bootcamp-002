@@ -50,3 +50,4 @@ Cree una rama corta orientada a la tarea específica a partir de la rama princip
 git checkout main
 git pull origin main
 git checkout -b feature/nombre-de-la-funcionalidad
+git checkout -b feature/nombre-de-la-funcionalidad

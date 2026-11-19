@@ -72,3 +72,4 @@ Describa los efectos esperados tras la aplicación de esta decisión en el proye
 
 * [Enlace a documentación técnica, estándar OWASP/NIST o RFC relevante]
 * [Enlace a ticket de trabajo o diseño técnico del sistema]
+* [Enlace a ticket de trabajo o diseño técnico del sistema]

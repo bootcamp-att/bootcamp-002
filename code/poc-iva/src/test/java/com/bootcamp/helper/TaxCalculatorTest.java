@@ -17,9 +17,9 @@ class TaxCalculatorTest {
 
         assertEquals(16.0, ivaCalculado, DELTA);
     }
-    @Test Caso Mayor a 0
+    @Test Caso2 Menor a 0
     void menorcero() {
-        double valorProducto = 100.0;
+        double valorProducto = -1.0;
         TaxCalculator calculator = new TaxCalculator(16.0);
 
         double ivaCalculado = calculator.calculateIva(valorProducto);
@@ -27,9 +27,9 @@ class TaxCalculatorTest {
         assertEquals(0.0, ivaCalculado, DELTA);
     }
 
-@Test Caso Igual a 0
+@Test Caso3 Igual a 0
     void igualCero() {
-        double valorProducto = 100.0;
+        double valorProducto = 0.0;
         TaxCalculator calculator = new TaxCalculator(16.0);
 
         double ivaCalculado = calculator.calculateIva(valorProducto);

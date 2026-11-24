@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.openapitools.jackson.nullable.JsonNullable;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -18,20 +18,36 @@ import jakarta.annotation.Generated;
  * ProductDetailResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-09-29T12:42:06.706477780-06:00[America/Mexico_City]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-11-23T14:26:06.053612662-06:00[America/Mexico_City]")
 public class ProductDetailResponse {
 
   private Long id;
 
   private String name;
 
-  private Double basePrice;
+  private BigDecimal basePrice;
 
-  private Double discountPercentage;
+  private BigDecimal discountPercentage;
 
-  private Double finalPrice;
+  private BigDecimal finalPrice;
 
   private Integer stock;
+
+  public ProductDetailResponse() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ProductDetailResponse(Long id, String name, BigDecimal basePrice, BigDecimal discountPercentage, BigDecimal finalPrice, Integer stock) {
+    this.id = id;
+    this.name = name;
+    this.basePrice = basePrice;
+    this.discountPercentage = discountPercentage;
+    this.finalPrice = finalPrice;
+    this.stock = stock;
+  }
 
   public ProductDetailResponse id(Long id) {
     this.id = id;
@@ -42,8 +58,8 @@ public class ProductDetailResponse {
    * Get id
    * @return id
   */
-  
-  @Schema(name = "id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "id", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("id")
   public Long getId() {
     return id;
@@ -62,8 +78,8 @@ public class ProductDetailResponse {
    * Get name
    * @return name
   */
-  
-  @Schema(name = "name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Size(min = 1) 
+  @Schema(name = "name", example = "Laptop Pro 14", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("name")
   public String getName() {
     return name;
@@ -73,63 +89,67 @@ public class ProductDetailResponse {
     this.name = name;
   }
 
-  public ProductDetailResponse basePrice(Double basePrice) {
+  public ProductDetailResponse basePrice(BigDecimal basePrice) {
     this.basePrice = basePrice;
     return this;
   }
 
   /**
-   * Get basePrice
+   * Precio base en MXN, 2 decimales
+   * minimum: 0
    * @return basePrice
   */
-  
-  @Schema(name = "basePrice", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid @DecimalMin("0") 
+  @Schema(name = "basePrice", example = "25000.0", description = "Precio base en MXN, 2 decimales", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("basePrice")
-  public Double getBasePrice() {
+  public BigDecimal getBasePrice() {
     return basePrice;
   }
 
-  public void setBasePrice(Double basePrice) {
+  public void setBasePrice(BigDecimal basePrice) {
     this.basePrice = basePrice;
   }
 
-  public ProductDetailResponse discountPercentage(Double discountPercentage) {
+  public ProductDetailResponse discountPercentage(BigDecimal discountPercentage) {
     this.discountPercentage = discountPercentage;
     return this;
   }
 
   /**
-   * Get discountPercentage
+   * Porcentaje aplicado (0 si no hay descuento o si descuento-service no responde)
+   * minimum: 0
+   * maximum: 100
    * @return discountPercentage
   */
-  
-  @Schema(name = "discountPercentage", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid @DecimalMin("0") @DecimalMax("100") 
+  @Schema(name = "discountPercentage", example = "10.0", description = "Porcentaje aplicado (0 si no hay descuento o si descuento-service no responde)", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("discountPercentage")
-  public Double getDiscountPercentage() {
+  public BigDecimal getDiscountPercentage() {
     return discountPercentage;
   }
 
-  public void setDiscountPercentage(Double discountPercentage) {
+  public void setDiscountPercentage(BigDecimal discountPercentage) {
     this.discountPercentage = discountPercentage;
   }
 
-  public ProductDetailResponse finalPrice(Double finalPrice) {
+  public ProductDetailResponse finalPrice(BigDecimal finalPrice) {
     this.finalPrice = finalPrice;
     return this;
   }
 
   /**
-   * Get finalPrice
+   * basePrice - basePrice * discountPercentage / 100, redondeado a 2 decimales (HALF_UP)
+   * minimum: 0
    * @return finalPrice
   */
-  
-  @Schema(name = "finalPrice", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid @DecimalMin("0") 
+  @Schema(name = "finalPrice", example = "22500.0", description = "basePrice - basePrice * discountPercentage / 100, redondeado a 2 decimales (HALF_UP)", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("finalPrice")
-  public Double getFinalPrice() {
+  public BigDecimal getFinalPrice() {
     return finalPrice;
   }
 
-  public void setFinalPrice(Double finalPrice) {
+  public void setFinalPrice(BigDecimal finalPrice) {
     this.finalPrice = finalPrice;
   }
 
@@ -140,10 +160,11 @@ public class ProductDetailResponse {
 
   /**
    * Get stock
+   * minimum: 0
    * @return stock
   */
-  
-  @Schema(name = "stock", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Min(0) 
+  @Schema(name = "stock", example = "15", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("stock")
   public Integer getStock() {
     return stock;

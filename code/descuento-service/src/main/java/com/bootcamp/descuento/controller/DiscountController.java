@@ -1,15 +1,24 @@
 package com.bootcamp.descuento.controller;
 
-import com.bootcamp.descuento.api.ApiApi;
+import com.bootcamp.descuento.api.DiscountApi;
+import com.bootcamp.descuento.exception.DescuentoNoEncontradoException;
+import com.bootcamp.descuento.mapper.DiscountMapper;
+import com.bootcamp.descuento.model.DiscountPage;
 import com.bootcamp.descuento.model.DiscountResponse;
 import com.bootcamp.descuento.repository.DiscountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Implementa el contrato discount-api.yaml (interfaz generada DiscountApi).
+ * Rutas, parámetros y validaciones vienen de la interfaz: NO se repiten aquí.
+ */
 @RestController
-public class DiscountController implements ApiApi {
+public class DiscountController implements DiscountApi {
 
     private static final Logger log = LoggerFactory.getLogger(DiscountController.class);
 
@@ -23,20 +32,21 @@ public class DiscountController implements ApiApi {
     public ResponseEntity<DiscountResponse> getDiscountByProductId(Long productId) {
         log.info("Buscando descuento para el producto ID: {}", productId);
 
-        return repository.findById(productId)
-                .map(entity -> {
-                    log.info("Descuento encontrado para producto ID {}: {}% - {}", 
-                            productId, entity.getPercentage(), entity.getDescription());
+        DiscountResponse respuesta = repository.findById(productId)
+                .map(DiscountMapper::toResponse)
+                .orElseThrow(() -> new DescuentoNoEncontradoException(productId));
 
-                    DiscountResponse response = new DiscountResponse();
-                    response.setProductId(entity.getProductId());
-                    response.setPercentage(entity.getPercentage());
-                    response.setDescription(entity.getDescription());
-                    return ResponseEntity.ok(response);
-                })
-                .orElseGet(() -> {
-                    log.warn("No se encontro descuento aplicable para el producto ID: {}", productId);
-                    return ResponseEntity.notFound().build();
-                });
+        log.info("Descuento encontrado para producto ID {}: {}% - {}",
+                productId, respuesta.getPercentage(), respuesta.getDescription());
+        return ResponseEntity.ok(respuesta);
+    }
+
+    @Override
+    public ResponseEntity<DiscountPage> listDiscounts(Integer page, Integer size) {
+        log.info("Listando descuentos: página {}, tamaño {}", page, size);
+
+        // Orden fijo: sin él, la paginación puede repetir u omitir elementos entre páginas
+        PageRequest pagina = PageRequest.of(page, size, Sort.by("productId"));
+        return ResponseEntity.ok(DiscountMapper.toPage(repository.findAll(pagina)));
     }
 }

@@ -1,6 +1,0 @@
-GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-descuento-service,com.bootcamp.descuento.mapper,DiscountMapper,0,43,0,0,0,10,0,2,0,2
-descuento-service,com.bootcamp.descuento.exception,ManejadorErrores,0,63,0,0,0,17,0,5,0,5
-descuento-service,com.bootcamp.descuento.exception,DescuentoNoEncontradoException,0,11,0,0,0,4,0,2,0,2
-descuento-service,com.bootcamp.descuento.controller,DiscountController,0,77,0,0,0,14,0,5,0,5
-descuento-service,com.bootcamp.descuento.entity,DiscountEntity,3,21,0,0,2,8,1,4,1,4

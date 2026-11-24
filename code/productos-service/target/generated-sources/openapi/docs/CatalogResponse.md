@@ -7,10 +7,10 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**productId** | **Long** |  |  [optional] |
-|**name** | **String** |  |  [optional] |
-|**basePrice** | **Double** |  |  [optional] |
-|**stock** | **Integer** |  |  [optional] |
+|**productId** | **Long** |  |  |
+|**name** | **String** |  |  |
+|**basePrice** | **BigDecimal** | Precio base en MXN, con 2 decimales |  |
+|**stock** | **Integer** |  |  |
 
 
 

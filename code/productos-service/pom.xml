@@ -17,8 +17,12 @@
     <name>productos-service</name>
 
     <properties>
-        <java.version>17</java.version>
-    </properties>
+    <java.version>17</java.version>
+    <!-- Spring Boot 3.2.3 trae Byte Buddy 1.14.x (soporta hasta Java 22).
+         Mockito lo usa para crear mocks de clases concretas; con JDK 25 falla.
+         1.17.5+ soporta Java 25. Quitar cuando se suba de versión Spring Boot. -->
+    <byte-buddy.version>1.17.8</byte-buddy.version>
+</properties>
 
     <dependencies>
         <dependency>
@@ -31,17 +35,19 @@
             <version>2.3.0</version>
         </dependency>
         <dependency>
-            <groupId>org.openapitools</groupId>
-            <artifactId>jackson-databind-nullable</artifactId>
-            <version>0.2.6</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Valida en las pruebas que cada respuesta cumpla products-api.yaml (pruebas de contrato) -->
+        <dependency>
+            <groupId>com.atlassian.oai</groupId>
+            <artifactId>swagger-request-validator-mockmvc</artifactId>
+            <version>2.40.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -76,7 +82,9 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- OpenAPI Generator Plugin (Servidor + Clientes HTTP) -->
+            <!-- OpenAPI Generator Plugin: CONTRATO PRIMERO (servidor + clientes HTTP).
+                 Los contratos de catálogo y descuento son COPIAS de los de esos servicios
+                 (v1.1.0). Si cambian allá, se copian aquí: ver verificar-contratos.sh -->
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -94,6 +102,12 @@
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
                                 <useSpringBoot3>true</useSpringBoot3>
+                                <!-- Interfaz ProductsApi (por el tag del contrato) -->
+                                <useTags>true</useTags>
+                                <!-- Sin implementaciones por defecto: el contrato obliga al código -->
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <useBeanValidation>true</useBeanValidation>
+                                <openApiNullable>false</openApiNullable>
                             </configOptions>
                         </configuration>
                     </execution>
@@ -108,8 +122,12 @@
                             <library>resttemplate</library>
                             <apiPackage>com.bootcamp.productos.client.discount.api</apiPackage>
                             <modelPackage>com.bootcamp.productos.client.discount.model</modelPackage>
+                            <invokerPackage>com.bootcamp.productos.client.discount</invokerPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
+                                <openApiNullable>false</openApiNullable>
                             </configOptions>
                         </configuration>
                     </execution>
@@ -124,8 +142,12 @@
                             <library>resttemplate</library>
                             <apiPackage>com.bootcamp.productos.client.catalog.api</apiPackage>
                             <modelPackage>com.bootcamp.productos.client.catalog.model</modelPackage>
+                            <invokerPackage>com.bootcamp.productos.client.catalog</invokerPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
+                                <openApiNullable>false</openApiNullable>
                             </configOptions>
                         </configuration>
                     </execution>
@@ -160,7 +182,17 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.11</version>
+                <!-- 0.8.14: primera versión con soporte oficial de Java 25 (class file 69) -->
+                <version>0.8.14</version>
+                <configuration>
+                    <!-- Sólo se mide NUESTRO código: servidor y clientes generados no cuentan -->
+                    <excludes>
+                        <exclude>com/bootcamp/productos/api/**</exclude>
+                        <exclude>com/bootcamp/productos/model/**</exclude>
+                        <exclude>com/bootcamp/productos/client/**</exclude>
+                        <exclude>com/bootcamp/productos/ProductosApplication.class</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals><goal>prepare-agent</goal></goals>

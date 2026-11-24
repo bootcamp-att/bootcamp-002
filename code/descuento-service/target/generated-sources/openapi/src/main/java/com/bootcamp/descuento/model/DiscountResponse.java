@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.openapitools.jackson.nullable.JsonNullable;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -18,14 +18,27 @@ import jakarta.annotation.Generated;
  * DiscountResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-09-29T09:56:06.300488872-06:00[America/Mexico_City]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-11-23T14:25:51.291308358-06:00[America/Mexico_City]")
 public class DiscountResponse {
 
   private Long productId;
 
-  private Double percentage;
+  private BigDecimal percentage;
 
   private String description;
+
+  public DiscountResponse() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public DiscountResponse(Long productId, BigDecimal percentage, String description) {
+    this.productId = productId;
+    this.percentage = percentage;
+    this.description = description;
+  }
 
   public DiscountResponse productId(Long productId) {
     this.productId = productId;
@@ -36,8 +49,8 @@ public class DiscountResponse {
    * Get productId
    * @return productId
   */
-  
-  @Schema(name = "productId", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "productId", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("productId")
   public Long getProductId() {
     return productId;
@@ -47,23 +60,25 @@ public class DiscountResponse {
     this.productId = productId;
   }
 
-  public DiscountResponse percentage(Double percentage) {
+  public DiscountResponse percentage(BigDecimal percentage) {
     this.percentage = percentage;
     return this;
   }
 
   /**
-   * Get percentage
+   * Porcentaje de descuento (0 a 100) con 2 decimales
+   * minimum: 0
+   * maximum: 100
    * @return percentage
   */
-  
-  @Schema(name = "percentage", example = "15.0", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid @DecimalMin("0") @DecimalMax("100") 
+  @Schema(name = "percentage", example = "10.0", description = "Porcentaje de descuento (0 a 100) con 2 decimales", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("percentage")
-  public Double getPercentage() {
+  public BigDecimal getPercentage() {
     return percentage;
   }
 
-  public void setPercentage(Double percentage) {
+  public void setPercentage(BigDecimal percentage) {
     this.percentage = percentage;
   }
 
@@ -76,8 +91,8 @@ public class DiscountResponse {
    * Get description
    * @return description
   */
-  
-  @Schema(name = "description", example = "Descuento de temporada", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Size(min = 1, max = 120) 
+  @Schema(name = "description", example = "Promo septiembre", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("description")
   public String getDescription() {
     return description;

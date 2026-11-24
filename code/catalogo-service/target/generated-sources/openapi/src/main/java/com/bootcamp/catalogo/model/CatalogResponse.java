@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.openapitools.jackson.nullable.JsonNullable;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -18,16 +18,30 @@ import jakarta.annotation.Generated;
  * CatalogResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-09-29T09:55:52.231996164-06:00[America/Mexico_City]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-11-23T14:25:38.027963133-06:00[America/Mexico_City]")
 public class CatalogResponse {
 
   private Long productId;
 
   private String name;
 
-  private Double basePrice;
+  private BigDecimal basePrice;
 
   private Integer stock;
+
+  public CatalogResponse() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public CatalogResponse(Long productId, String name, BigDecimal basePrice, Integer stock) {
+    this.productId = productId;
+    this.name = name;
+    this.basePrice = basePrice;
+    this.stock = stock;
+  }
 
   public CatalogResponse productId(Long productId) {
     this.productId = productId;
@@ -38,8 +52,8 @@ public class CatalogResponse {
    * Get productId
    * @return productId
   */
-  
-  @Schema(name = "productId", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "productId", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("productId")
   public Long getProductId() {
     return productId;
@@ -58,8 +72,8 @@ public class CatalogResponse {
    * Get name
    * @return name
   */
-  
-  @Schema(name = "name", example = "Laptop Pro 15", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Size(min = 1, max = 120) 
+  @Schema(name = "name", example = "Laptop Pro 14", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("name")
   public String getName() {
     return name;
@@ -69,23 +83,24 @@ public class CatalogResponse {
     this.name = name;
   }
 
-  public CatalogResponse basePrice(Double basePrice) {
+  public CatalogResponse basePrice(BigDecimal basePrice) {
     this.basePrice = basePrice;
     return this;
   }
 
   /**
-   * Get basePrice
+   * Precio base en MXN, con 2 decimales
+   * minimum: 0
    * @return basePrice
   */
-  
-  @Schema(name = "basePrice", example = "1200.0", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid @DecimalMin("0") 
+  @Schema(name = "basePrice", example = "25000.0", description = "Precio base en MXN, con 2 decimales", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("basePrice")
-  public Double getBasePrice() {
+  public BigDecimal getBasePrice() {
     return basePrice;
   }
 
-  public void setBasePrice(Double basePrice) {
+  public void setBasePrice(BigDecimal basePrice) {
     this.basePrice = basePrice;
   }
 
@@ -96,10 +111,11 @@ public class CatalogResponse {
 
   /**
    * Get stock
+   * minimum: 0
    * @return stock
   */
-  
-  @Schema(name = "stock", example = "45", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Min(0) 
+  @Schema(name = "stock", example = "15", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("stock")
   public Integer getStock() {
     return stock;

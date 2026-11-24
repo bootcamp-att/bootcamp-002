@@ -1,37 +1,58 @@
 package com.bootcamp.catalogo.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 
+/**
+ * Tabla "catalog". Es el modelo de PERSISTENCIA: no se expone directo en la API.
+ * La API usa los DTOs generados del contrato (CatalogResponse, CatalogPage);
+ * la conversión entre ambos vive en CatalogMapper.
+ */
 @Entity
 @Table(name = "catalog")
 public class CatalogEntity {
 
     @Id
+    @Column(name = "product_id")
     private Long productId;
+
+    @Column(name = "name", nullable = false, length = 120)
     private String name;
-    private Double basePrice;
+
+    /** Dinero: BigDecimal con 2 decimales (nunca double). */
+    @Column(name = "base_price", nullable = false, precision = 12, scale = 2)
+    private BigDecimal basePrice;
+
+    @Column(name = "stock", nullable = false)
     private Integer stock;
 
-    public CatalogEntity() {}
+    protected CatalogEntity() {
+        // Requerido por JPA
+    }
 
-    public CatalogEntity(Long productId, String name, Double basePrice, Integer stock) {
+    public CatalogEntity(Long productId, String name, BigDecimal basePrice, Integer stock) {
         this.productId = productId;
         this.name = name;
         this.basePrice = basePrice;
         this.stock = stock;
     }
 
-    public Long getProductId() { return productId; }
-    public void setProductId(Long productId) { this.productId = productId; }
+    public Long getProductId() {
+        return productId;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public Double getBasePrice() { return basePrice; }
-    public void setBasePrice(Double basePrice) { this.basePrice = basePrice; }
+    public BigDecimal getBasePrice() {
+        return basePrice;
+    }
 
-    public Integer getStock() { return stock; }
-    public void setStock(Integer stock) { this.stock = stock; }
+    public Integer getStock() {
+        return stock;
+    }
 }

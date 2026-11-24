@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.bootcamp.descuento.controller.DiscountControllerTest
+-------------------------------------------------------------------------------
+Tests run: 0, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.899 s -- in com.bootcamp.descuento.controller.DiscountControllerTest
